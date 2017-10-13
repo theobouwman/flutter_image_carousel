@@ -1,9 +1,15 @@
-# image_carousel
+# flutter_image_carousel
 
-A new flutter package project.
+A flutter package for image carousels.
 
-## Getting Started
+Supports both Asset and Network images.
 
-For help getting started with Flutter, view our online [documentation](http://flutter.io/).
+## Example
 
-For help on editing package code, view the [documentation](https://flutter.io/developing-packages/).
+```dart
+new ImageCarousel(<CarouselImage>[
+  new CarouselImage(ImageType.asset, "assets/car1.jpg"),
+  new CarouselImage(ImageType.network, "http://urbantrunk.com/wp-content/uploads/2016/06/volkswagen-pink-beetle-thumbnail-1-990x667.jpg"),
+  new CarouselImage(ImageType.asset, "assets/car3.jpg"),
+])
+```
