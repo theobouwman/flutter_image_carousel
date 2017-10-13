@@ -1,8 +1,8 @@
 name: image_carousel
-description: A new flutter package project.
+author: Theo Bouwman <theobouwman98@gmail.com>
+homepage: https://github.com/theobouwman/flutter_image_carousel
+description: A image carousel flutter plugin
 version: 0.0.1
-author:
-homepage:
 
 dependencies:
   flutter:
