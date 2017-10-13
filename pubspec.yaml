@@ -2,7 +2,7 @@ name: image_carousel
 author: Theo Bouwman <theobouwman98@gmail.com>
 homepage: https://github.com/theobouwman/flutter_image_carousel
 description: A image carousel flutter plugin
-version: 0.1.0
+version: 0.1.1
 
 dependencies:
   flutter:
@@ -11,10 +11,6 @@ dependencies:
 dev_dependencies:
   test: ^0.12.0
 
-# For information on the generic Dart part of this file, see the
-# following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
 
   # To add assets to your package, add an assets section, like this:
