@@ -21,3 +21,7 @@ new ImageCarousel(
   interval: new Duration(seconds: 1),
 )
 ```
+
+## Showcase
+
+![](show_case_gif.gif)
