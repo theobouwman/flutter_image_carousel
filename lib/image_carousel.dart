@@ -4,15 +4,18 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
 
 class ImageCarousel extends StatefulWidget {
   final List<CarouselImage> images;
   final double height;
   final TargetPlatform platform;
+  final Duration interval;
 
   // Images will shrink according to the value of [height]
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
-  ImageCarousel(this.images, {this.height = 250.0, this.platform});
+  // Set [interval] to let the carousel loop through each photo automatically
+  ImageCarousel(this.images, {this.height = 250.0, this.platform, this.interval});
 
   @override
   State createState() => new _ImageCarouselState();
@@ -26,6 +29,12 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
     super.initState();
     _tabController =
         new TabController(vsync: this, length: widget.images.length);
+
+    if (widget.interval != null) {
+      new Timer.periodic(widget.interval, (_) {
+        _tabController.animateTo(_tabController.index == _tabController.length - 1 ? 0 : ++_tabController.index);
+      });
+    }
   }
 
   @override
