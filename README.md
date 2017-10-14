@@ -8,7 +8,7 @@ Supports both Asset and Network images.
 
 ```dart
 new ImageCarousel(
-  <CarouselImage>[
+  [
     new CarouselImage(ImageType.asset, "assets/car1.jpg"),
     new CarouselImage(ImageType.network, "http://urbantrunk.com/wp-content/uploads/2016/06/volkswagen-pink-beetle-thumbnail-1-990x667.jpg"),
     new CarouselImage(ImageType.asset, "assets/car3.jpg"),
