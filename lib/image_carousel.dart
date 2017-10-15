@@ -5,23 +5,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
+import 'package:zoomable_image/zoomable_image.dart';
 
 class ImageCarousel extends StatefulWidget {
   final List<CarouselImage> images;
   final double height;
   final TargetPlatform platform;
   final Duration interval;
+  final bool allowZoom;
 
   // Images will shrink according to the value of [height]
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
   // Set [interval] to let the carousel loop through each photo automatically
-  ImageCarousel(this.images, {this.height = 250.0, this.platform, this.interval});
+  // Pinch to zoom will be turned on by default
+  ImageCarousel(this.images,
+      {this.height = 250.0,
+      this.platform,
+      this.interval,
+      this.allowZoom = true});
 
   @override
   State createState() => new _ImageCarouselState();
 }
 
-class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProviderStateMixin {
+class _ImageCarouselState extends State<ImageCarousel>
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
@@ -32,7 +40,10 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
 
     if (widget.interval != null) {
       new Timer.periodic(widget.interval, (_) {
-        _tabController.animateTo(_tabController.index == _tabController.length - 1 ? 0 : ++_tabController.index);
+        _tabController.animateTo(
+            _tabController.index == _tabController.length - 1
+                ? 0
+                : ++_tabController.index);
       });
     }
   }
@@ -107,14 +118,48 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     }
   }
 
+  Widget _getIndicator(TargetPlatform platform) {
+    if (platform == TargetPlatform.iOS) {
+      return new CupertinoActivityIndicator();
+    } else {
+      return new CircularProgressIndicator();
+    }
+  }
+
+  void _toZoomRoute() {
+    Widget scaffold = new Scaffold(
+      body: new Center(
+        child: new ZoomableImage(
+          _image.image,
+          scale: 16.0,
+        ),
+      ),
+    );
+
+    Navigator.of(context).push(
+          defaultTargetPlatform == TargetPlatform.iOS
+              ? new CupertinoPageRoute(
+                  builder: (BuildContext context) => scaffold)
+              : new MaterialPageRoute(
+                  builder: (BuildContext context) => scaffold),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Center(
       child: _loading
-          ? widget.carousel.platform == TargetPlatform.android
-              ? new CircularProgressIndicator()
-              : new CupertinoActivityIndicator()
-          : _image,
+          ? _getIndicator(widget.carousel.platform == null
+              ? defaultTargetPlatform
+              : widget.carousel.platform)
+          : new GestureDetector(
+              child: _image,
+              onTap: () {
+                if (widget.carousel.allowZoom) {
+                  _toZoomRoute();
+                }
+              },
+            ),
     );
   }
 }
