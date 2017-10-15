@@ -1,3 +1,7 @@
+## [0.2.0]
+
+* added pinch to zoom
+
 ## [0.1.3]
 
 * added visualization
