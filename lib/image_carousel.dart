@@ -1,10 +1,12 @@
 library image_carousel;
 
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'dart:async';
+import 'package:flutter/widgets.dart';
 import 'package:zoomable_image/zoomable_image.dart';
 
 class ImageCarousel extends StatefulWidget {
@@ -85,6 +87,9 @@ class CarouselImageWidget extends StatefulWidget {
     switch (carouselImage.type) {
       case ImageType.network:
         return new Image.network(carouselImage.uri);
+      case ImageType.cachedNetwork:
+        return new Image(
+            image: new CachedNetworkImageProvider(carouselImage.uri));
       default:
         return new Image.asset(carouselImage.uri);
     }
@@ -103,17 +108,17 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     super.initState();
     _image = widget.getImage();
 
-    if (widget.carouselImage.type == ImageType.network) {
+    if (widget.carouselImage.type == ImageType.asset) {
+      setState(() {
+        _loading = false;
+      });
+    } else {
       _image.image.resolve(new ImageConfiguration()).addListener((i, b) {
         if (mounted) {
           setState(() {
             _loading = false;
           });
         }
-      });
-    } else {
-      setState(() {
-        _loading = false;
       });
     }
   }
@@ -164,4 +169,4 @@ class _CarouselImageState extends State<CarouselImageWidget> {
   }
 }
 
-enum ImageType { asset, network }
+enum ImageType { asset, network, cachedNetwork }
