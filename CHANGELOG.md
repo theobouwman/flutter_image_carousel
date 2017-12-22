@@ -1,3 +1,7 @@
+## [0.3.0]
+
+* added option to cache the network image
+
 ## [0.2.0]
 
 * added pinch to zoom
