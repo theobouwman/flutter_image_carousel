@@ -5,8 +5,8 @@ description: A image carousel flutter plugin
 version: 0.3.0
 
 dependencies:
-  zoomable_image: ^1.1.2
-  cached_network_image: ^0.1.0
+  zoomable_image: 1.1.2
+  cached_network_image: 0.1.0
 
   flutter:
     sdk: flutter
