@@ -1,3 +1,7 @@
+## [0.4.0]
+
+* **API CHANGE**: must provide `ImageProvider` object instead of custom class
+
 ## [0.3.0]
 
 * added option to cache the network image

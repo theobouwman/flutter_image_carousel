@@ -8,10 +8,10 @@ Supports both Asset and Network images.
 
 ```dart
 new ImageCarousel(
-  [
-    new CarouselImage(ImageType.asset, "assets/car1.jpg"),
-    new CarouselImage(ImageType.network, "http://urbantrunk.com/wp-content/uploads/2016/06/volkswagen-pink-beetle-thumbnail-1-990x667.jpg"),
-    new CarouselImage(ImageType.cachedNetwork, "http://cached-images.com/image1.jpg"),
+  <ImageProvider>[
+    new NetworkImage('http://www.hilversum.ferraridealers.com/siteasset/ferraridealer/54f07ac8c35b6/961/420/selected/0/0/0/54f07ac8c35b6.jpg'),
+    new NetworkImage('http://auto.ferrari.com/en_EN/wp-content/uploads/sites/5/2017/08/ferrari-portofino-reveal-2017-featured-new.jpg'),
+    new NetworkImage('http://www.hilversum.ferraridealers.com/siteasset/ferraridealer/54f07ac8c35b6/961/420/selected/0/0/0/54f07ac8c35b6.jpg'),
   ],
   interval: new Duration(seconds: 1),
 )

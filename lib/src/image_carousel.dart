@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoomable_image/zoomable_image.dart';
 
 class ImageCarousel extends StatefulWidget {
-  final List<CarouselImage> images;
+  final List<ImageProvider> imageProviders;
   final double height;
   final TargetPlatform platform;
   final Duration interval;
@@ -18,7 +18,7 @@ class ImageCarousel extends StatefulWidget {
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
   // Set [interval] to let the carousel loop through each photo automatically
   // Pinch to zoom will be turned on by default
-  ImageCarousel(this.images,
+  ImageCarousel(this.imageProviders,
       {this.height = 250.0,
       this.platform,
       this.interval,
@@ -36,7 +36,7 @@ class _ImageCarouselState extends State<ImageCarousel>
   void initState() {
     super.initState();
     _tabController =
-        new TabController(vsync: this, length: widget.images.length);
+        new TabController(vsync: this, length: widget.imageProviders.length);
 
     if (widget.interval != null) {
       new Timer.periodic(widget.interval, (_) {
@@ -60,66 +60,26 @@ class _ImageCarouselState extends State<ImageCarousel>
       height: widget.height,
       child: new TabBarView(
         controller: _tabController,
-        children: widget.images.map((CarouselImage ci) {
-          return new CarouselImageWidget(widget, ci);
+        children: widget.imageProviders.map((ImageProvider provider) {
+          return new CarouselImageWidget(widget, provider);
         }).toList(),
       ),
     );
   }
 }
 
-class CarouselImage {
-  final ImageType type;
-  final String uri;
-
-  CarouselImage(this.type, this.uri);
-}
-
 class CarouselImageWidget extends StatefulWidget {
   final ImageCarousel carousel;
-  final CarouselImage carouselImage;
+  final ImageProvider imageProvider;
 
-  CarouselImageWidget(this.carousel, this.carouselImage);
-
-  Image getImage() {
-    switch (carouselImage.type) {
-      case ImageType.network:
-        return new Image.network(carouselImage.uri);
-      case ImageType.cachedNetwork:
-        return new Image(
-            image: new CachedNetworkImageProvider(carouselImage.uri));
-      default:
-        return new Image.asset(carouselImage.uri);
-    }
-  }
+  CarouselImageWidget(this.carousel, this.imageProvider);
 
   @override
   State createState() => new _CarouselImageState();
 }
 
 class _CarouselImageState extends State<CarouselImageWidget> {
-  Image _image;
   bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _image = widget.getImage();
-
-    if (widget.carouselImage.type == ImageType.asset) {
-      setState(() {
-        _loading = false;
-      });
-    } else {
-      _image.image.resolve(new ImageConfiguration()).addListener((i, b) {
-        if (mounted) {
-          setState(() {
-            _loading = false;
-          });
-        }
-      });
-    }
-  }
 
   Widget _getIndicator(TargetPlatform platform) {
     if (platform == TargetPlatform.iOS) {
@@ -133,7 +93,7 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     Widget scaffold = new Scaffold(
       body: new Center(
         child: new ZoomableImage(
-          _image.image,
+          widget.imageProvider,
           scale: 16.0,
         ),
       ),
@@ -148,6 +108,20 @@ class _CarouselImageState extends State<CarouselImageWidget> {
         );
   }
 
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.imageProvider.resolve(new ImageConfiguration()).addListener((i, b) {
+      if (mounted) {
+        setState(() {
+          _loading = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Center(
@@ -156,7 +130,7 @@ class _CarouselImageState extends State<CarouselImageWidget> {
               ? defaultTargetPlatform
               : widget.carousel.platform)
           : new GestureDetector(
-              child: _image,
+              child: new Image(image: widget.imageProvider),
               onTap: () {
                 if (widget.carousel.allowZoom) {
                   _toZoomRoute();
@@ -166,5 +140,3 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     );
   }
 }
-
-enum ImageType { asset, network, cachedNetwork }
