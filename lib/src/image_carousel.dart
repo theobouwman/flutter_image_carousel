@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:zoomable_image/zoomable_image.dart';
 
@@ -13,37 +12,30 @@ class ImageCarousel extends StatefulWidget {
   final TargetPlatform platform;
   final Duration interval;
   final bool allowZoom;
+  final TabController tabController;
 
   // Images will shrink according to the value of [height]
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
   // Set [interval] to let the carousel loop through each photo automatically
   // Pinch to zoom will be turned on by default
   ImageCarousel(this.imageProviders,
-      {this.height = 250.0,
-      this.platform,
-      this.interval,
-      this.allowZoom = true});
+      {this.height = 250.0, this.platform, this.interval, this.allowZoom = true, this.tabController});
 
   @override
   State createState() => new _ImageCarouselState();
 }
 
-class _ImageCarouselState extends State<ImageCarousel>
-    with SingleTickerProviderStateMixin {
+class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController =
-        new TabController(vsync: this, length: widget.imageProviders.length);
+    _tabController = widget.tabController ?? new TabController(vsync: this, length: widget.imageProviders.length);
 
     if (widget.interval != null) {
       new Timer.periodic(widget.interval, (_) {
-        _tabController.animateTo(
-            _tabController.index == _tabController.length - 1
-                ? 0
-                : ++_tabController.index);
+        _tabController.animateTo(_tabController.index == _tabController.length - 1 ? 0 : ++_tabController.index);
       });
     }
   }
@@ -101,13 +93,10 @@ class _CarouselImageState extends State<CarouselImageWidget> {
 
     Navigator.of(context).push(
           defaultTargetPlatform == TargetPlatform.iOS
-              ? new CupertinoPageRoute(
-                  builder: (BuildContext context) => scaffold)
-              : new MaterialPageRoute(
-                  builder: (BuildContext context) => scaffold),
+              ? new CupertinoPageRoute(builder: (BuildContext context) => scaffold)
+              : new MaterialPageRoute(builder: (BuildContext context) => scaffold),
         );
   }
-
 
   @override
   void initState() {
@@ -126,9 +115,7 @@ class _CarouselImageState extends State<CarouselImageWidget> {
   Widget build(BuildContext context) {
     return new Center(
       child: _loading
-          ? _getIndicator(widget.carousel.platform == null
-              ? defaultTargetPlatform
-              : widget.carousel.platform)
+          ? _getIndicator(widget.carousel.platform == null ? defaultTargetPlatform : widget.carousel.platform)
           : new GestureDetector(
               child: new Image(image: widget.imageProvider),
               onTap: () {
