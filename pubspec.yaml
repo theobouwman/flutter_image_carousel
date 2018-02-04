@@ -2,7 +2,7 @@ name: image_carousel
 author: Theo Bouwman <theobouwman98@gmail.com>
 homepage: https://github.com/theobouwman/flutter_image_carousel
 description: A image carousel flutter plugin
-version: 0.4.0
+version: 0.4.0+1
 
 dependencies:
   zoomable_image: 1.1.2
