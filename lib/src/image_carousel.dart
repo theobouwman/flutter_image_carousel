@@ -13,13 +13,19 @@ class ImageCarousel extends StatefulWidget {
   final Duration interval;
   final bool allowZoom;
   final TabController tabController;
+  final BoxFit fit;
 
   // Images will shrink according to the value of [height]
   // If you prefer to use the Material or Cupertino style activity indicator set the [platform] parameter
   // Set [interval] to let the carousel loop through each photo automatically
   // Pinch to zoom will be turned on by default
   ImageCarousel(this.imageProviders,
-      {this.height = 250.0, this.platform, this.interval, this.allowZoom = true, this.tabController});
+      {this.height = 250.0,
+      this.platform,
+      this.interval,
+      this.allowZoom = true,
+      this.tabController,
+      this.fit = BoxFit.cover});
 
   @override
   State createState() => new _ImageCarouselState();
@@ -53,7 +59,7 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
       child: new TabBarView(
         controller: _tabController,
         children: widget.imageProviders.map((ImageProvider provider) {
-          return new CarouselImageWidget(widget, provider);
+          return new CarouselImageWidget(widget, provider, widget.fit);
         }).toList(),
       ),
     );
@@ -63,8 +69,9 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
 class CarouselImageWidget extends StatefulWidget {
   final ImageCarousel carousel;
   final ImageProvider imageProvider;
+  final BoxFit fit;
 
-  CarouselImageWidget(this.carousel, this.imageProvider);
+  CarouselImageWidget(this.carousel, this.imageProvider, this.fit);
 
   @override
   State createState() => new _CarouselImageState();
@@ -117,7 +124,10 @@ class _CarouselImageState extends State<CarouselImageWidget> {
       child: _loading
           ? _getIndicator(widget.carousel.platform == null ? defaultTargetPlatform : widget.carousel.platform)
           : new GestureDetector(
-              child: new Image(image: widget.imageProvider),
+              child: new Image(
+                image: widget.imageProvider,
+                fit: widget.fit,
+              ),
               onTap: () {
                 if (widget.carousel.allowZoom) {
                   _toZoomRoute();
