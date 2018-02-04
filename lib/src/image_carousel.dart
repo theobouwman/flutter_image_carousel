@@ -59,7 +59,7 @@ class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProvider
       child: new TabBarView(
         controller: _tabController,
         children: widget.imageProviders.map((ImageProvider provider) {
-          return new CarouselImageWidget(widget, provider, widget.fit);
+          return new CarouselImageWidget(widget, provider, widget.fit, widget.height);
         }).toList(),
       ),
     );
@@ -70,8 +70,9 @@ class CarouselImageWidget extends StatefulWidget {
   final ImageCarousel carousel;
   final ImageProvider imageProvider;
   final BoxFit fit;
+  final double height;
 
-  CarouselImageWidget(this.carousel, this.imageProvider, this.fit);
+  CarouselImageWidget(this.carousel, this.imageProvider, this.fit, this.height);
 
   @override
   State createState() => new _CarouselImageState();
@@ -120,7 +121,8 @@ class _CarouselImageState extends State<CarouselImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Center(
+    return new Container(
+      height: widget.height,
       child: _loading
           ? _getIndicator(widget.carousel.platform == null ? defaultTargetPlatform : widget.carousel.platform)
           : new GestureDetector(
