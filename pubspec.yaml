@@ -6,7 +6,6 @@ version: 0.4.0
 
 dependencies:
   zoomable_image: 1.1.2
-  cached_network_image: 0.1.0
 
   flutter:
     sdk: flutter
