@@ -91,6 +91,7 @@ class _CarouselImageState extends State<CarouselImageWidget> {
 
   void _toZoomRoute() {
     Widget scaffold = new Scaffold(
+      appBar: new AppBar(),
       body: new Center(
         child: new ZoomableImage(
           widget.imageProvider,
@@ -101,8 +102,8 @@ class _CarouselImageState extends State<CarouselImageWidget> {
 
     Navigator.of(context).push(
           defaultTargetPlatform == TargetPlatform.iOS
-              ? new CupertinoPageRoute(builder: (BuildContext context) => scaffold)
-              : new MaterialPageRoute(builder: (BuildContext context) => scaffold),
+              ? new CupertinoPageRoute(builder: (BuildContext context) => scaffold, fullscreenDialog: true)
+              : new MaterialPageRoute(builder: (BuildContext context) => scaffold, fullscreenDialog: true),
         );
   }
 
