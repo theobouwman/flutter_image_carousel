@@ -20,12 +20,7 @@ class ImageCarousel extends StatefulWidget {
   // Set [interval] to let the carousel loop through each photo automatically
   // Pinch to zoom will be turned on by default
   ImageCarousel(this.imageProviders,
-      {this.height = 250.0,
-      this.platform,
-      this.interval,
-      this.allowZoom = true,
-      this.tabController,
-      this.fit = BoxFit.cover});
+      {this.height = 250.0, this.platform, this.interval, this.allowZoom = true, this.tabController, this.fit = BoxFit.cover});
 
   @override
   State createState() => new _ImageCarouselState();
@@ -85,7 +80,11 @@ class _CarouselImageState extends State<CarouselImageWidget> {
     if (platform == TargetPlatform.iOS) {
       return new CupertinoActivityIndicator();
     } else {
-      return new CircularProgressIndicator();
+      return new Container(
+        height: 40.0,
+        width: 40.0,
+        child: new CircularProgressIndicator(),
+      );
     }
   }
 
