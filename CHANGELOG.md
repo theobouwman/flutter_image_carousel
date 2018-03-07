@@ -1,3 +1,6 @@
+## [0.4.0+1]
+* you can provide a TabController if you want to add a TabPageSelector
+
 ## [0.4.0]
 
 * **API CHANGE**: must provide `ImageProvider` object instead of custom class
