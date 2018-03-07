@@ -4,8 +4,11 @@ homepage: https://github.com/theobouwman/flutter_image_carousel
 description: A image carousel flutter plugin
 version: 0.4.0+1
 
+environment:
+  sdk: '>=1.20.0 <2.0.0'
+
 dependencies:
-  zoomable_image: 1.1.2
+  zoomable_image: '>=1.1.0 <1.2.0'
 
   flutter:
     sdk: flutter
