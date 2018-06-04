@@ -28,22 +28,28 @@ class ImageCarousel extends StatefulWidget {
 
 class _ImageCarouselState extends State<ImageCarousel> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    _tabController = widget.tabController ?? new TabController(vsync: this, length: widget.imageProviders.length);
+    _tabController = widget.tabController ??
+        new TabController(vsync: this, length: widget.imageProviders.length);
 
     if (widget.interval != null) {
-      new Timer.periodic(widget.interval, (_) {
-        _tabController.animateTo(_tabController.index == _tabController.length - 1 ? 0 : ++_tabController.index);
+      _timer = new Timer.periodic(widget.interval, (_) {
+        _tabController.animateTo(
+            _tabController.index == _tabController.length - 1
+                ? 0
+                : ++_tabController.index);
       });
     }
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
+    _timer?.cancel();
+    _tabController?.dispose();
     super.dispose();
   }
 
